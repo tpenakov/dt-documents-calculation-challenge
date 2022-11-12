@@ -3,6 +3,8 @@ package design.technologies.api.core.model;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -23,7 +25,7 @@ public class DtDocument {
 
   @NotBlank private String number;
   @NotNull private Type type;
-  @NotBlank private DtCustomer customer;
+  @NotBlank @Valid private DtCustomer customer;
 
   private DtDocument parent;
 
@@ -31,5 +33,7 @@ public class DtDocument {
   @Pattern(regexp = "^([A-Z]){3}$")
   private String currencyCode;
 
-  @NotNull private BigDecimal amount;
+  @NotNull
+  @Min(0L)
+  private BigDecimal amount;
 }

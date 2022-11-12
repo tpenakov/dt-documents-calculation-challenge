@@ -52,6 +52,8 @@ class CsvDocumentParserTest {
     final String data = getUnitTestUtils().readFromTextFile("input/challenge-sample-documents.csv");
     final List<DtDocument> documents = getParser().parse(data);
     assertTrue(CollectionUtils.isNotEmpty(documents));
+    assertEquals("123456789", documents.get(0).getCustomer().getVat());
+    assertEquals("123465123", documents.get(6).getCustomer().getVat());
   }
 
   @Test
