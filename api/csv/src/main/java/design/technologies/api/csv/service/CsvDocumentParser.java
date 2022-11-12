@@ -31,6 +31,7 @@ public class CsvDocumentParser implements DocumentParser {
   public static final String CUSTOMER = "Customer";
   public static final String VAT_NUMBER = "Vat number";
   public static final String PARENT_DOCUMENT = "Parent document";
+  public static final String UNSUPPORTED_DOCUMENT_TYPE = "Unsupported document type: ";
   private final CSVFormat format;
 
   public CsvDocumentParser() {
@@ -79,7 +80,7 @@ public class CsvDocumentParser implements DocumentParser {
       case "3":
         return DtDocument.Type.DEBIT_NOTE;
       default:
-        throw new RuntimeException("Unsupported document type: " + type);
+        throw new RuntimeException(UNSUPPORTED_DOCUMENT_TYPE + type);
     }
   }
 }
