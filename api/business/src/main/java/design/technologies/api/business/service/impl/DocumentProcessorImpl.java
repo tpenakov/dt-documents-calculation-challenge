@@ -34,8 +34,6 @@ import static design.technologies.api.business.model.BusinessConstants.*;
 @Slf4j
 public class DocumentProcessorImpl implements DocumentProcessor {
 
-  public static final String EXCHANGE_RATE_SEPARATOR = ":";
-
   private final MoneyProcessor moneyProcessor;
   private final Validator validator;
 
@@ -46,7 +44,7 @@ public class DocumentProcessorImpl implements DocumentProcessor {
       final List<DtDocument> documents,
       final List<String> exchangeRates,
       final String outputCurrency) {
-    checkForEmptyInput(documents, outputCurrency);
+    checkForEmptyInput(documents, exchangeRates, outputCurrency);
     validateDocuments(documents);
     validateCurrencies(documents, exchangeRates);
   }
@@ -59,10 +57,7 @@ public class DocumentProcessorImpl implements DocumentProcessor {
   @Override
   public List<DtDocument> extract(
       final List<String> exchangeRates, final String outputCurrency, final String customerVat) {
-    final Map<String, BigDecimal> exchangeRatesMap =
-        exchangeRates.stream()
-            .map(DocumentProcessorImpl::toExchangeRate)
-            .collect(Collectors.toMap(Tuple2::_1, Tuple2::_2));
+    final Map<String, BigDecimal> exchangeRatesMap = toExchangeRatesMap(exchangeRates);
 
     final boolean filterByVat = StringUtils.isNotBlank(customerVat);
 
@@ -93,8 +88,15 @@ public class DocumentProcessorImpl implements DocumentProcessor {
               dtDocument.setBalance(
                   getMoneyProcessor()
                       .convert(dtDocument.getBalance(), outputCurrency, exchangeRatesMap));
+              dtDocument.setParent(null);
             })
         .collect(Collectors.toList());
+  }
+
+  Map<String, BigDecimal> toExchangeRatesMap(final List<String> exchangeRates) {
+    return exchangeRates.stream()
+        .map(DocumentProcessorImpl::toExchangeRate)
+        .collect(Collectors.toMap(Tuple2::_1, Tuple2::_2));
   }
 
   DtDocument negateAmount(final DtDocument input) {
@@ -125,12 +127,15 @@ public class DocumentProcessorImpl implements DocumentProcessor {
     return input;
   }
 
-  static void checkForEmptyInput(final List<DtDocument> documents, final String outputCurrency) {
+  void checkForEmptyInput(
+      final List<DtDocument> documents,
+      final List<String> exchangeRates,
+      final String outputCurrency) {
     if (CollectionUtils.isEmpty(documents)) {
       throw new InvalidInputException(DOCUMENTS_ARE_MISSING);
     }
 
-    if (CollectionUtils.isEmpty(documents)) {
+    if (CollectionUtils.isEmpty(exchangeRates)) {
       throw new InvalidInputException(MISSING_EXCHANGE_RATES);
     }
 
@@ -164,13 +169,12 @@ public class DocumentProcessorImpl implements DocumentProcessor {
     parents.forEach(
         parentId -> {
           if (!documentsById.containsKey(parentId)) {
-            throw new InvalidInputException("Missing document for parentId=" + parentId);
+            throw new InvalidInputException(MISSING_DOCUMENT_FOR_PARENT_ID + parentId);
           }
         });
   }
 
-  static void validateCurrencies(
-      final List<DtDocument> documents, final List<String> exchangeRates) {
+  void validateCurrencies(final List<DtDocument> documents, final List<String> exchangeRates) {
     final AtomicReference<String> defaultCurrency = new AtomicReference<>();
     final Map<String, BigDecimal> exchangeRatesMap = new HashMap<>(exchangeRates.size());
     exchangeRates.forEach(
@@ -182,7 +186,9 @@ public class DocumentProcessorImpl implements DocumentProcessor {
             throw new InvalidInputException(DUPLICATED_CURRENCY + currency);
           }
           exchangeRatesMap.put(currency, rate);
-          if (BigDecimal.ONE.equals(rate)) {
+          if (getMoneyProcessor()
+              .toInternalScale(BigDecimal.ONE)
+              .equals(getMoneyProcessor().toInternalScale(rate))) {
             defaultCurrency.set(currency);
           }
         });
@@ -195,7 +201,7 @@ public class DocumentProcessorImpl implements DocumentProcessor {
         .forEach(
             currency -> {
               if (!exchangeRatesMap.containsKey(currency)) {
-                throw new InvalidInputException("Missing currency: " + currency);
+                throw new InvalidInputException(MISSING_CURRENCY + currency);
               }
             });
   }

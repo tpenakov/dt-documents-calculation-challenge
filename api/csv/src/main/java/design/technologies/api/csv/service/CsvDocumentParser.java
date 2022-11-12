@@ -2,6 +2,7 @@ package design.technologies.api.csv.service;
 
 import design.technologies.api.core.model.DtCustomer;
 import design.technologies.api.core.model.DtDocument;
+import design.technologies.api.core.model.DtMoney;
 import design.technologies.api.core.service.DocumentParser;
 import io.vavr.control.Try;
 import lombok.AccessLevel;
@@ -11,6 +12,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -32,6 +34,8 @@ public class CsvDocumentParser implements DocumentParser {
   public static final String VAT_NUMBER = "Vat number";
   public static final String PARENT_DOCUMENT = "Parent document";
   public static final String UNSUPPORTED_DOCUMENT_TYPE = "Unsupported document type: ";
+  public static final String CURRENCY = "Currency";
+  public static final String TOTAL = "Total";
   private final CSVFormat format;
 
   public CsvDocumentParser() {
@@ -64,6 +68,11 @@ public class CsvDocumentParser implements DocumentParser {
                 .filter(StringUtils::isNotBlank)
                 .map(s -> DtDocument.builder().number(s).build())
                 .orElse(null))
+        .balance(
+            DtMoney.builder()
+                .currency(row.get(CURRENCY))
+                .amount(NumberUtils.createBigDecimal(row.get(TOTAL)))
+                .build())
         .build();
   }
 

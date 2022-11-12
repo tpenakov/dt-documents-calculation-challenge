@@ -8,8 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
+import static design.technologies.api.business.model.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /*
@@ -18,11 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Getter(AccessLevel.PACKAGE)
 @Slf4j
 class MoneyProcessorImplTest {
-
-  public static final String BGN = "BGN";
-  public static final String EUR = "EUR";
-  public static final Map<String, BigDecimal> EXCHANGE_RATE =
-      Map.of(EUR, BigDecimal.ONE, BGN, BigDecimal.valueOf(1.95583));
 
   MoneyProcessorImpl processor;
 
