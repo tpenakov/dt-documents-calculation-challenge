@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'design.technologies.api'
+version '00.00.01-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'design.technologies.api'
+            artifactId = 'test'
+            version = '00.00.01-SNAPSHOT'
+
+            from(components.java)
+        }
+    }
+}
+
+dependencies {
+    implementation project(":core")
+
+    implementation "org.apache.commons:commons-csv:1.9.0"
+    implementation "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}"
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation "io.vavr:vavr:${vavrVersion}"
+
+    implementation "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}
