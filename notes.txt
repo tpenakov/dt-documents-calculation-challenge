@@ -1,0 +1,36 @@
+docker run --rm \
+  -v ${PWD}:/local openapitools/openapi-generator-cli generate \
+  -i https://raw.githubusercontent.com/clippings/documents-calculation-challenge/master/openapi.yaml \
+  -g spring \
+  --additional-properties=basePackage=design.technologies.api,apiPackage=design.technologies.api.generated.api,modelPackage=design.technologies.api.generated.model,configPackage=design.technologies.api.generated.configuration,groupId=design.technologies.api,artifactId=design-technologies-api,useSpringController=true,title=DesignTechnologiesDocumentCalculation \
+  -o /local/api/api
+
+------------------------------------------
+
+https://www.baeldung.com/maven-convert-to-gradle
+triphon@gggpc1404:business$ gradle init
+
+Found a Maven build. Generate a Gradle build from this? (default: yes) [yes, no] yes
+
+Select build script DSL:
+  1: Groovy
+  2: Kotlin
+Enter selection (default: Groovy) [1..2] 1
+
+Generate build using new APIs and behavior (some features may change in the next minor release)? (default: no) [yes, no] yes
+
+
+> Task :init
+Maven to Gradle conversion is an incubating feature.
+Get more help with your project: https://docs.gradle.org/7.4/userguide/migrating_from_maven.html
+
+BUILD SUCCESSFUL in 27s
+2 actionable tasks: 2 executed
+
+-------------------------------------------------
+
+docker run --rm \
+  -v ${PWD}:/local openapitools/openapi-generator-cli generate \
+  -i https://raw.githubusercontent.com/clippings/documents-calculation-challenge/master/openapi.yaml \
+  -g typescript-axios \
+  -o /local/api-client/axios
