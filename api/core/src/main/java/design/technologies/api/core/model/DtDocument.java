@@ -4,11 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.math.BigDecimal;
 
 /*
  * Created by triphon 12.11.22 г.
@@ -29,11 +26,5 @@ public class DtDocument {
 
   private DtDocument parent;
 
-  @NotBlank
-  @Pattern(regexp = "^([A-Z]){3}$")
-  private String currencyCode;
-
-  @NotNull
-  @Min(0L)
-  private BigDecimal amount;
+  @NotNull @Valid private DtMoney balance;
 }

@@ -26,4 +26,8 @@ public class UnitTestUtils {
   public String readFromTextFile(final String path) {
     return READ_TEXT_FILE_FN.apply(getClass().getClassLoader().getResourceAsStream(path));
   }
+
+  public String getValidCsvFile() {
+    return readFromTextFile("input/challenge-sample-documents.csv");
+  }
 }

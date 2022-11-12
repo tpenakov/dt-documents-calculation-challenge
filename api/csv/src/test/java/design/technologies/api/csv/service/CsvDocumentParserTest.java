@@ -49,7 +49,7 @@ class CsvDocumentParserTest {
 
   @Test
   void parseTest() {
-    final String data = getUnitTestUtils().readFromTextFile("input/challenge-sample-documents.csv");
+    final String data = getUnitTestUtils().getValidCsvFile();
     final List<DtDocument> documents = getParser().parse(data);
     assertTrue(CollectionUtils.isNotEmpty(documents));
     assertEquals("123456789", documents.get(0).getCustomer().getVat());

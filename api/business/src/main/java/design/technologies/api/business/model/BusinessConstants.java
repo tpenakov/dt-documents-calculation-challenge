@@ -11,4 +11,5 @@ public class BusinessConstants {
   public static final String NULL_DOCUMENT = "NULL document";
   public static final String WRONG_EXCHANGE_RATE_RAW_DATA = "Wrong exchange rate raw data: ";
   public static final String MISSING_DEFAULT_CURRENCY = "Missing default currency";
+  public static final String DUPLICATED_CURRENCY = "Duplicated currency: ";
 }

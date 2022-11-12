@@ -1,6 +1,7 @@
 package design.technologies.api.controller;
 
 import design.technologies.api.core.model.DtDocument;
+import design.technologies.api.core.model.DtMoney;
 import design.technologies.api.core.service.DocumentParser;
 import design.technologies.api.core.service.DocumentService;
 import design.technologies.api.generated.api.ApiApi;
@@ -66,13 +67,17 @@ public class ApiController implements ApiApi {
 
     final CalculateResponse calculateResponse = new CalculateResponse();
     calculateResponse.currency(
-        documents.stream().findAny().map(DtDocument::getCurrencyCode).orElse(null));
+        documents.stream()
+            .findAny()
+            .map(DtDocument::getBalance)
+            .map(DtMoney::getCurrency)
+            .orElse(null));
     calculateResponse.customers(
         documents.stream()
             .map(
                 dtDocument -> {
                   final Customer customer = new Customer();
-                  customer.setBalance(dtDocument.getAmount());
+                  customer.setBalance(dtDocument.getBalance().getAmount());
                   customer.setName(dtDocument.getCustomer().getName());
                   return customer;
                 })
