@@ -8,6 +8,8 @@ WORK_DIR=/project
 DIR="$(dirname $0)"
 
 docker stop ${UI_SERVICE_NAME} ${API_SERVICE_NAME}
+echo 'will sleep for 5 seconds'
+sleep 5
 
 buildUiCmd() {
 	docker run --rm -it --network host \
