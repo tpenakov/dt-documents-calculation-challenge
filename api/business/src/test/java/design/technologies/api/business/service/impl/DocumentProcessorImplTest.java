@@ -1,16 +1,17 @@
 package design.technologies.api.business.service.impl;
 
 import design.technologies.api.business.model.BusinessConstants;
-import design.technologies.api.business.model.TestConstants;
 import design.technologies.api.business.utils.AllTestUtils;
 import design.technologies.api.core.exception.InvalidInputException;
 import design.technologies.api.core.model.DtDocument;
+import design.technologies.api.test.model.TestConstants;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,11 +19,12 @@ import org.junit.jupiter.api.Test;
 import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static design.technologies.api.business.model.BusinessConstants.MISSING_DOCUMENT_FOR_PARENT_ID;
-import static design.technologies.api.business.model.TestConstants.BGN;
-import static design.technologies.api.business.model.TestConstants.USD;
+import static design.technologies.api.test.model.TestConstants.BGN;
+import static design.technologies.api.test.model.TestConstants.USD;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -186,6 +188,37 @@ class DocumentProcessorImplTest {
             InvalidInputException.class, () -> getProcessor().validateDocuments(documents));
     assertTrue(StringUtils.startsWith(exception.getMessage(), MISSING_DOCUMENT_FOR_PARENT_ID));
     assertTrue(StringUtils.endsWith(exception.getMessage(), document.getParent().getNumber()));
+  }
+
+  @Test
+  void validateDocuments_ConstraintViolation_ThrowTest() {
+    final Validator validator = getAllTestUtils().getValidator();
+    final List<DtDocument> documents = new ArrayList<>(getAllTestUtils().getValidDocuments());
+    final DtDocument document = documents.get(0);
+
+    doReturn(
+            Set.of(
+                ConstraintViolationImpl.forBeanValidation(
+                    WRONG,
+                    Map.of(),
+                    Map.of(),
+                    WRONG,
+                    DtDocument.class,
+                    document,
+                    document,
+                    document,
+                    null,
+                    null,
+                    null)))
+        .when(validator)
+        .validate(any());
+
+    document.setParent(DtDocument.builder().number("MISSING").build());
+
+    final InvalidInputException exception =
+        assertThrows(
+            InvalidInputException.class, () -> getProcessor().validateDocuments(documents));
+    assertTrue(StringUtils.contains(exception.getMessage(), WRONG));
   }
 
   @Test

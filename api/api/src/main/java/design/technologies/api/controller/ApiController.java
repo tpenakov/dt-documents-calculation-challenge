@@ -47,7 +47,7 @@ public class ApiController implements ApiApi {
       final String customerVat) {
     return Try.of(file::getBytes)
         .map(String::new)
-        .map(documentParser::parse)
+        .map(data -> getDocumentParser().parse(data))
         .map(
             documents ->
                 getDocumentService().process(documents, exchangeRates, outputCurrency, customerVat))

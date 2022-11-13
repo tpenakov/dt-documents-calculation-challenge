@@ -1,4 +1,4 @@
-package design.technologies.api.business.utils;
+package design.technologies.api.api.utils;
 
 import design.technologies.api.business.model.BusinessConstants;
 import design.technologies.api.business.service.impl.MoneyProcessorImpl;

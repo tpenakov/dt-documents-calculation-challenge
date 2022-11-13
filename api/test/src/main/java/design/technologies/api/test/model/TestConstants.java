@@ -1,4 +1,4 @@
-package design.technologies.api.business.model;
+package design.technologies.api.test.model;
 
 import java.math.BigDecimal;
 import java.util.Map;

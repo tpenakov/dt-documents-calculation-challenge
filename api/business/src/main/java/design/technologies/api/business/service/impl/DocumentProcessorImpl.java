@@ -16,6 +16,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
 import java.util.*;
@@ -142,7 +143,11 @@ public class DocumentProcessorImpl implements DocumentProcessor {
           if (Objects.isNull(dtDocument)) {
             throw new InvalidInputException(NULL_DOCUMENT);
           }
-          getValidator().validate(dtDocument);
+          final Set<ConstraintViolation<DtDocument>> validateResult =
+              getValidator().validate(dtDocument);
+          if (CollectionUtils.isNotEmpty(validateResult)) {
+            throw new InvalidInputException(validateResult.toString());
+          }
           final String number = dtDocument.getNumber();
           if (documentsById.containsKey(number)) {
             throw new InvalidInputException(DUPLICATE_NUMBER + number);

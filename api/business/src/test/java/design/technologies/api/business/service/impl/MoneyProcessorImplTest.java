@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static design.technologies.api.business.model.TestConstants.*;
+import static design.technologies.api.test.model.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /*
