@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
  */
 @Getter(AccessLevel.PROTECTED)
 @Slf4j
+@SuppressWarnings("deprecation")
 public class CsvDocumentParser implements DocumentParser {
 
   public static final String DOCUMENT_NUMBER = "Document number";

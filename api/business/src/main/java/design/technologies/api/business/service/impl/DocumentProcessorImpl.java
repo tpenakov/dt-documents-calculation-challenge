@@ -56,9 +56,10 @@ public class DocumentProcessorImpl implements DocumentProcessor {
 
   @Override
   public List<DtDocument> extract(
-      final List<String> exchangeRates, final String outputCurrency, final String customerVat) {
+      final List<String> exchangeRates, final String outputCurrency, final String customerVatRaw) {
     final Map<String, BigDecimal> exchangeRatesMap = toExchangeRatesMap(exchangeRates);
 
+    final String customerVat = StringUtils.trim(customerVatRaw);
     final boolean filterByVat = StringUtils.isNotBlank(customerVat);
 
     final Function<DtDocument, String> getKeyFn = dtDocument -> dtDocument.getCustomer().getVat();
@@ -68,10 +69,7 @@ public class DocumentProcessorImpl implements DocumentProcessor {
                 ? negateAmount(dtDocument)
                 : dtDocument;
     final BinaryOperator<DtDocument> sumFn =
-        (dtDocument, dtDocument2) ->
-            DtDocument.Type.CREDIT_NOTE.equals(dtDocument2.getType())
-                ? subtractAmount(dtDocument, dtDocument2, exchangeRatesMap)
-                : addAmount(dtDocument, dtDocument2, exchangeRatesMap);
+        (dtDocument, dtDocument2) -> addAmount(dtDocument, dtDocument2, exchangeRatesMap);
     final Map<String, DtDocument> resultMap =
         getDocumentStorage().get().stream()
             .filter(
@@ -115,15 +113,6 @@ public class DocumentProcessorImpl implements DocumentProcessor {
       final Map<String, BigDecimal> exchangeRatesMap) {
     input.setBalance(
         getMoneyProcessor().add(input.getBalance(), input1.getBalance(), exchangeRatesMap));
-    return input;
-  }
-
-  DtDocument subtractAmount(
-      final DtDocument input,
-      final DtDocument input1,
-      final Map<String, BigDecimal> exchangeRatesMap) {
-    input.setBalance(
-        getMoneyProcessor().subtract(input.getBalance(), input1.getBalance(), exchangeRatesMap));
     return input;
   }
 

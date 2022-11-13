@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,7 +78,7 @@ class DocumentProcessorImplTest {
   @Test
   void extract_ByCustomerVat_OkTest() {
     saveTest();
-    final String customerVat = "123456789";
+    final String customerVat = "987654321";
     final List<DtDocument> documents =
         getProcessor().extract(getAllTestUtils().getExchangeRatesRaw(), USD, customerVat);
     log.info("documents: {}", documents);
@@ -85,13 +86,16 @@ class DocumentProcessorImplTest {
     documents.forEach(dtDocument -> assertEquals(USD, dtDocument.getBalance().getCurrency()));
     assertEquals(1, documents.size());
     assertEquals(customerVat, documents.get(0).getCustomer().getVat());
+    assertEquals(
+        getProcessor().getMoneyProcessor().toCurrencyScale(NumberUtils.createBigDecimal("688.31")),
+        documents.get(0).getBalance().getAmount());
   }
 
   @Test
   void checkForEmptyInputTest() {
-    getProcessor()
-        .checkForEmptyInput(
-            getAllTestUtils().getValidDocuments(), getAllTestUtils().getExchangeRatesRaw(), USD);
+    final List<String> exchangeRatesRaw = getAllTestUtils().getExchangeRatesRaw();
+    log.info("exchangeRatesRaw: {}", exchangeRatesRaw);
+    getProcessor().checkForEmptyInput(getAllTestUtils().getValidDocuments(), exchangeRatesRaw, USD);
   }
 
   @Test

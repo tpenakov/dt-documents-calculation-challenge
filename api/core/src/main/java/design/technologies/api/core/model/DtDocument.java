@@ -22,7 +22,7 @@ public class DtDocument {
 
   @NotBlank private String number;
   @NotNull private Type type;
-  @NotBlank @Valid private DtCustomer customer;
+  @NotNull @Valid private DtCustomer customer;
 
   private DtDocument parent;
 
