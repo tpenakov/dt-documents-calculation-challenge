@@ -8,8 +8,8 @@ WORK_DIR=/project
 DIR="$(dirname $0)"
 
 docker stop ${UI_SERVICE_NAME} ${API_SERVICE_NAME}
-echo 'will sleep for 5 seconds'
-sleep 5
+echo 'will sleep for 1 second'
+sleep 1
 
 buildUiCmd() {
 	docker run --rm -it --network host \
@@ -37,8 +37,8 @@ cd -
 cd "${DIR}/.." || exit 1
 docker run -i --rm -d -p 44445:80 \
 	--name=${UI_SERVICE_NAME} \
-	--volume=ui/ui-admin/build:/var/www \
-	--volume=scripts/nginx/conf.d:/etc/nginx/conf.d \
+	--volume=$(pwd)/ui/ui-admin/build:/var/www \
+	--volume=$(pwd)/scripts/nginx/conf.d:/etc/nginx/conf.d \
 	nginx:1.16
 cd -
 
