@@ -70,3 +70,25 @@ After executing `gradle build` or `gradle test` command the reports are generate
 
 [csv module](api/csv/build/reports/jacoco/test/html/index.html) : api/csv/build/reports/jacoco/test/html/index.html
 
+## UI
+
+UI is created (basic implementation) via [react-admin](https://marmelab.com/react-admin/)
+
+
+After running 
+
+```
+bash scripts/docker-build-and-run.sh
+```
+it will be available on http://localhost:44445
+
+
+Development also can be performed via executing this script:
+
+
+```
+bash scripts/docker-run-ui-work.sh
+```
+
+How to work with dev server is described in [UI README](ui/ui-admin/README.md)
+
