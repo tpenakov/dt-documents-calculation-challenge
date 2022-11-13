@@ -49,6 +49,13 @@ docker run --rm \
   -o /local/ui/ui-admin/src/api-client/fetch
 
 --------------------------------------------------
+docker run -i --rm -p 44445:80 \
+          --volume=/mnt/triphon1204/triphon/work/design-technologies/projects/documents-calculation-challenge/ui/ui-admin/build:/var/www \
+          --volume=/mnt/triphon1204/triphon/work/rja/projects/rja-ibe-ui/src/test/resources/documents/baseui/nginx/conf.d:/etc/nginx/conf.d \
+          nginx:1.16
+
+
+--------------------------------------------------
 Usefull links:
 https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/
 https://martinfowler.com/eaaCatalog/money.html
