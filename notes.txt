@@ -29,6 +29,8 @@ BUILD SUCCESSFUL in 27s
 
 
 -------------------------------------------------
+https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/
+
 gradle :api:bootRun
 
 gradle :api:bootBuildImage
@@ -36,8 +38,25 @@ docker run --rm -it --network host triphon/dt-documents-calculation-challenge
 
 -------------------------------------------------
 
+bash scripts/docker-run-ui-work.sh bash
+yarn create react-app ui-admin --template typescript
+cd ui-admin
+
 docker run --rm \
   -v ${PWD}:/local openapitools/openapi-generator-cli generate \
   -i https://raw.githubusercontent.com/clippings/documents-calculation-challenge/master/openapi.yaml \
-  -g typescript-axios \
-  -o /local/api-client/axios
+  -g typescript-fetch \
+  -o /local/ui/ui-admin/src/api-client/fetch
+
+--------------------------------------------------
+Usefull links:
+https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/
+https://martinfowler.com/eaaCatalog/money.html
+https://www.logicbig.com/examples/spring-mvc/file-upload/spring-mock-mvc-request-builders-multipart.html
+https://docs.vavr.io/#_try
+https://commons.apache.org/proper/commons-csv/user-guide.html
+https://coderslegacy.com/java/java-csv-parser-apache-commons/
+https://www.baeldung.com/maven-convert-to-gradle
+https://openapi-generator.tech/docs/generators/spring/
+https://openapi-generator.tech/docs/generators/typescript-axios/
+
