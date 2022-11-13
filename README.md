@@ -3,7 +3,7 @@ Design Technologies Document Calculation Challenge Implementation
 
 ## Requirements
 
-* Docker
+* Docker (make sure that `--network host` option is working fine)
 * Java 11+
 * Gradle 7.3+
 
@@ -46,7 +46,7 @@ It is a multimodule `gradle` project with the following modules:
   * IMPORTANT: include only as test dependency
 * `csv` - module for parsing `*.csv` files
 * `business` - this module is responsible for business related tasks
-* `api` - the presentation layer. `OpenAPI` generated code is there and conversion between business DTOs and `OpenAPI` models is performed there.
+* `api` - the presentation layer. `OpenAPI` generated code is there and conversion between business DTOs and `OpenAPI` models is performed.
 
 ### OpenAPI UI
 [Default API Backend endpoint](http://localhost:8080/) will lead to [Swagger UI](http://localhost:8080/swagger-ui.html)
