@@ -1,0 +1,62 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'jacoco'
+}
+
+group 'design.technologies.api'
+version '00.00.01-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'design.technologies.api'
+            artifactId = 'business'
+            version = '00.00.01-SNAPSHOT'
+
+            from(components.java)
+        }
+    }
+}
+
+dependencies {
+    implementation project(":core")
+
+    implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
+    implementation "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}"
+    implementation "org.apache.commons:commons-collections4:${apacheCommonsCollectionVersion}"
+    implementation "io.vavr:vavr:${vavrVersion}"
+    implementation "org.slf4j:slf4j-api:${slf4jApiVersion}"
+
+    implementation "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation project(":test")
+    testImplementation project(":csv")
+    testImplementation "org.hibernate.validator:hibernate-validator:6.2.5.Final"
+    testImplementation "org.slf4j:slf4j-simple:${slf4jApiVersion}"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['**/model/**',])
+        }))
+    }
+}

@@ -9,3 +9,8 @@
 
 rootProject.name = 'design-technologies-api-parent'
 include 'api'
+include 'core'
+include 'csv'
+include 'test'
+include 'business'
+

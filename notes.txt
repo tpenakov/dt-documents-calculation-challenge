@@ -27,6 +27,13 @@ Get more help with your project: https://docs.gradle.org/7.4/userguide/migrating
 BUILD SUCCESSFUL in 27s
 2 actionable tasks: 2 executed
 
+
+-------------------------------------------------
+gradle :api:bootRun
+
+gradle :api:bootBuildImage
+docker run --rm -it --network host triphon/dt-documents-calculation-challenge
+
 -------------------------------------------------
 
 docker run --rm \
