@@ -39,7 +39,7 @@ docker run -i --rm -d -p 44445:80 \
 	--name=${UI_SERVICE_NAME} \
 	--volume=$(pwd)/ui/ui-admin/build:/var/www \
 	--volume=$(pwd)/scripts/nginx/conf.d:/etc/nginx/conf.d \
-	nginx:1.16
+	nginx:stable
 cd -
 
 echo "UI is available on http://localhost:44445"

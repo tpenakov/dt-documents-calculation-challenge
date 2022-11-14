@@ -6,6 +6,7 @@ Design Technologies Document Calculation Challenge Implementation
 * Docker (make sure that `--network host` option is working fine)
 * Java 11+
 * Gradle 7.3+
+* Nodejs v18.9.0 - optional
 
 ## How to
 
